@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia Muzyki - Interaktywna Oś Czasu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .timeline-item {
+            width: 80%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        .timeline-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        .sub-timeline, .sub-sub-timeline {
+            display: none;
+            width: 100%;
+        }
+        .sub-timeline-item {
+            width: 80%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .explanation {
+            margin-top: 20px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-timeline" class="timeline">
+        <div class="timeline-item" onclick="showSubTimeline(1)">
+            <img src="1.png" alt="Era 1">
+            <span>1. Wczesne formy komunikacji dźwiękowej (1 milion - 100 tysięcy lat temu)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(2)">
+            <img src="2.png" alt="Era 2">
+            <span>2. Pierwotne formy muzyczne (100 tysięcy - 40 tysięcy lat temu)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(3)">
+            <img src="3.png" alt="Era 3">
+            <span>3. Muzyka w paleolicie (40 tysięcy - 10 tysięcy lat temu)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(4)">
+            <img src="4.png" alt="Era 4">
+            <span>4. Muzyka w mezolicie i neolicie (10 tysięcy - 5 tysięcy lat temu)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(5)">
+            <img src="5.png" alt="Era 5">
+            <span>5. Wczesne cywilizacje i muzyka (5 tysięcy - 2 tysiące lat temu)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(6)">
+            <img src="6.png" alt="Era 6">
+            <span>6. Muzyka w średniowieczu (500 - 1400 n.e.)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(7)">
+            <img src="7.png" alt="Era 7">
+            <span>7. Renesans i barok (1400 - 1750 n.e.)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(8)">
+            <img src="8.png" alt="Era 8">
+            <span>8. Klasycyzm i romantyzm (1750 - 1900 n.e.)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(9)">
+            <img src="9.png" alt="Era 9">
+            <span>9. XX wiek - epoka rewolucji (1900 - 2000 n.e.)</span>
+        </div>
+        <div class="timeline-item" onclick="showSubTimeline(10)">
+            <img src="10.png" alt="Era 10">
+            <span>10. Muzyka współczesna i przyszłość (2000 - współczesność)</span>
+        </div>
+    </div>
+
+    <div id="explanation" class="explanation">
+        <h2>Historia Muzyki</h2>
+        <p>Kliknij na dowolny okres, aby zobaczyć więcej szczegółów.</p>
+    </div>
+
+    <div id="sub-timeline" class="sub-timeline">
+        <!-- Sub-timeline items will be dynamically added here -->
+    </div>
+
+    <div id="sub-sub-timeline" class="sub-sub-timeline">
+        <h3>Szczegółowe informacje</h3>
+        <p id="sub-sub-content"></p>
+        <button class="back-button" onclick="showSubTimeline(currentMainIndex)">Powrót do poprzedniego poziomu</button>
+    </div>
+
+    <script>
+        const subTimelineContent = {
+            1: [
+                "1.1. Przedludzka komunikacja dźwiękowa",
+                "1.2. Pojawienie się pierwszych prymitywnych form rytmicznych",
+                "1.3. Ewolucja aparatu głosowego",
+                "1.4. Początki śpiewu"
+            ],
+            2: [
+                "2.1. Rozwój śpiewu rytualnego",
+                "2.2. Pierwsze narzędzia muzyczne",
+                "2.3. Instrumenty dęte",
+                "2.4. Początki polifonii"
+            ],
+            3: [
+                "3.1. Rozkwit narzędzi muzycznych",
+                "3.2. Muzyka a malarstwo naskalne",
+                "3.3. Rozwój muzyki rytualnej",
+                "3.4. Pierwsze ślady muzyki w społecznościach łowiecko-zbierackich"
+            ],
+            4: [
+                "4.1. Muzyka w kontekście osiadłego trybu życia",
+                "4.2. Instrumenty strunowe",
+                "4.3. Muzyka a religia",
+                "4.4. Początki zorganizowanych występów"
+            ],
+            5: [
+                "5.1. Sumerowie i muzyka",
+                "5.2. Egipt faraonów",
+                "5.3. Starożytna Grecja",
+                "5.4. Muzyka w starożytnych Chinach"
+            ],
+            6: [
+                "6.1. Chorał gregoriański",
+                "6.2. Muzyka świecka",
+                "6.3. Notacja muzyczna",
+                "6.4. Polifonia"
+            ],
+            7: [
+                "7.1. Odrodzenie form muzycznych",
+                "7.2. Opera",
+                "7.3. Muzyka sakralna baroku",
+                "7.4. Rozwój instrumentów"
+            ],
+            8: [
+                "8.1. Klasycyzm w muzyce",
+                "8.2. Ludwig van Beethoven",
+                "8.3. Romantyzm w muzyce",
+                "8.4. Wczesne nagrania muzyczne"
+            ],
+            9: [
+                "9.1. Modernizm w muzyce",
+                "9.2. Jazz i blues",
+                "9.3. Muzyka elektroniczna",
+                "9.4. Rozwój nagrań i mediów"
+            ],
+            10: [
+                "10.1. Globalizacja muzyki",
+                "10.2. Muzyka a technologia",
+                "10.3. Nowe formy wyrazu muzycznego",
+                "10.4. Muzyka a społeczeństwo"
+            ]
+        };
+
+        const subSubTimelineContent = {
+            "1.1": "Wczesne formy wokalizacji u wspólnego przodka ludzi i innych naczelnych.",
+            "1.2": "Rytmiczne uderzanie przedmiotów przez homo erectus.",
+            "1.3": "Zmiany anatomiczne umożliwiające kontrolowaną wokalizację.",
+            "1.4": "Wstępne formy melodycznej wokalizacji u homo sapiens i neandertalczyków.",
+            "2.1": "Powiązanie śpiewu z obrzędami i rytuałami religijnymi.",
+            "2.2": "Kości i inne przedmioty używane jako perkusyjne instrumenty.",
+            "2.3": "Najstarsze flety wykonane z kości (np. flet z jaskini Geissenklösterle, około 40 tys. lat temu).",
+            "2.4": "Złożone formy wokalne, potencjalne początki harmonii.",
+            "3.1": "Rozwój bardziej zaawansowanych instrumentów, jak bębny i struny.",
+            "3.2": "Powiązania między sztuką wizualną a dźwiękową.",
+            "3.3": "Zwiększenie znaczenia muzyki w kontekście rytuałów i ceremonii.",
+            "3.4": "Muzyka jako element integracji społecznej.",
+            "4.1": "Przemiany muzyczne w wyniku powstania rolnictwa.",
+            "4.2": "Rozwój pierwszych prototypów instrumentów strunowych (np. liry).",
+            "4.3": "Ścisłe związki muzyki z religiami wczesnych cywilizacji.",
+            "4.4": "Formowanie się pierwszych grup muzycznych do celów rytualnych.",
+            "5.1": "Znaczenie muzyki w kulturze sumeryjskiej (np. harfy, liry).",
+            "5.2": "Muzyka w kontekście ceremonii dworskich i religijnych.",
+            "5.3": "Teoria muzyki, rozwój notacji i wpływ na kulturę europejską.",
+            "5.4": "Teoria muzyki pentatonicznej i rozwój instrumentów (np. guqin).",
+            "6.1": "Rozwój muzyki sakralnej w Europie Zachodniej.",
+            "6.2": "Pieśni trubadurów i minnesingerów.",
+            "6.3": "Ewolucja systemu zapisu muzyki.",
+            "6.4": "Rozwój złożonych form polifonicznych (np. organum).",
+            "7.1": "Muzyka renesansowa i wpływ humanizmu.",
+            "7.2": "Narodziny opery we Włoszech.",
+            "7.3": "Rozwój form oratoryjnych i kantatowych.",
+            "7.4": "Powstanie klawesynu i wczesnych form fortepianu.",
+            "8.1": "Rozkwit form sonatowych i symfonicznych.",
+            "8.2": "Przełom w muzyce między klasycyzmem a romantyzmem.",
+            "8.3": "Muzyka programowa, rozwój orkiestry i ekspresja indywidualizmu.",
+            "8.4": "Pierwsze próby rejestracji dźwięku (np. fonograf Edisona).",
+            "9.1": "Eksperymenty z tonacją, formą i strukturą muzyczną.",
+            "9.2": "Narodziny i globalny rozwój muzyki afroamerykańskiej.",
+            "9.3": "Początki syntezatorów i rozwój muzyki elektronicznej.",
+            "9.4": "Rewolucja związana z radiem, telewizją i fonografią.",
+            "10.1": "Wpływ internetu i cyfryzacji na dystrybucję muzyki.",
+            "10.2": "Rozwój AI w muzyce, generatywna muzyka i kompozycje komputerowe.",
+            "10.3": "Muzyka eksperymentalna, sound art, live coding.",
+            "10.4": "Wpływ muzyki na społeczne ruchy i zmiany kulturowe."
+        };
+
+        let currentMainIndex = 0;
+
+        function showSubTimeline(index) {
+            currentMainIndex = index;
+            document.getElementById('main-timeline').style.display = 'none';
+            document.getElementById('sub-timeline').style.display = 'flex';
+            document.getElementById('sub-sub-timeline').style.display = 'none';
+            document.getElementById('explanation').innerHTML = `
+                <h2>${document.getElementsByClassName('timeline-item')[index-1].textContent}</h2>
+                <p>Kliknij na dowolny podokres, aby zobaczyć szczegółowe informacje.</p>
+            `;
+
+            const subTimeline = document.getElementById('sub-timeline');
+            subTimeline.innerHTML = '';
+            subTimelineContent[index].forEach((item, i) => {
+                const subItem = document.createElement('div');
+                subItem.className = 'sub-timeline-item';
+                subItem.textContent = item;
+                subItem.onclick = () => showSubSubTimeline(index + '.' + (i+1));
+                subTimeline.appendChild(subItem);
+            });
+
+            const backButton = document.createElement('button');
+            backButton.className = 'back-button';
+            backButton.textContent = 'Powrót do głównej osi czasu';
+            backButton.onclick = showMainTimeline;
+            subTimeline.appendChild(backButton);
+        }
+
+        function showSubSubTimeline(index) {
+            document.getElementById('main-timeline').style.display = 'none';
+            document.getElementById('sub-timeline').style.display = 'none';
+            document.getElementById('sub-sub-timeline').style.display = 'block';
+            document.getElementById('explanation').innerHTML = `
+                <h2>${subTimelineContent[currentMainIndex][index.split('.')[1]-1]}</h2>
+            `;
+            document.getElementById('sub-sub-content').textContent = subSubTimelineContent[index];
+        }
+
+        function showMainTimeline() {
+            document.getElementById('main-timeline').style.display = 'flex';
+            document.getElementById('sub-timeline').style.display = 'none';
+            document.getElementById('sub-sub-timeline').style.display = 'none';
+            document.getElementById('explanation').innerHTML = `
+                <h2>Historia Muzyki</h2>
+                <p>Kliknij na dowolny okres, aby zobaczyć więcej szczegółów.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
